@@ -1,0 +1,41 @@
+diff --git a/libs/vsdl3library.pas b/libs/vsdl3library.pas
+index 53ec3af..5a730e8 100644
+--- a/libs/vsdl3library.pas
++++ b/libs/vsdl3library.pas
+@@ -14,7 +14,7 @@ uses Classes, SysUtils, vlibrary,
+   {$IFDEF DARWIN}
+      unix;
+   {$ELSE}
+-     unix, x, xlib;
++     unix;
+   {$ENDIF}
+ {$ENDIF}
+ 
+diff --git a/libs/vsdl3mixerlibrary.pas b/libs/vsdl3mixerlibrary.pas
+index bc6b706..2a5ad6f 100644
+--- a/libs/vsdl3mixerlibrary.pas
++++ b/libs/vsdl3mixerlibrary.pas
+@@ -14,7 +14,7 @@ uses Classes, SysUtils, vlibrary, vsdl3library,
+   {$IFDEF DARWIN}
+      unix;
+   {$ELSE}
+-     unix, x, xlib;
++     unix;
+   {$ENDIF}
+ {$ENDIF}
+ 
+diff --git a/src/vapp.pas b/src/vapp.pas
+index 49505fe..ddc3441 100644
+--- a/src/vapp.pas
++++ b/src/vapp.pas
+@@ -364,6 +364,10 @@ begin
+   DiscoverPaths(FPaths);
+   if HasOption('config') then
+     FPaths.ConfigurationPath := GetOptionValue('config');
++  // settings are written, so they belong with the other writable data
++  if HasOption('write-path') then
++    FPaths.SettingsPath := IncludeTrailingPathDelimiter(
++      GetOptionValue('write-path') ) + SETTINGS_FILE;
+ 
+   BeforeConfiguration(FPaths);
+   LoadConfiguration(FPaths);

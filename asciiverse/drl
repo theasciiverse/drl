@@ -1,0 +1,12 @@
+#!/bin/sh
+# Starts DRL from an av install, in the terminal and without sound. DRL
+# reads its files from the current folder, so this changes into lib/;
+# settings, saves, scores and morgue files go to the player's own folder,
+# ${XDG_DATA_HOME:-~/.local/share}/drl (see PATCHES.md).
+# av links ~/.local/bin/drl to this file, so follow that link first.
+self=$(readlink "$0" 2>/dev/null || printf '%s' "$0")
+dir=$(cd "$(dirname "$self")" && pwd)
+data="${XDG_DATA_HOME:-$HOME/.local/share}/drl"
+mkdir -p "$data"
+cd "$dir/lib" && exec ./drl --console --no-sound \
+  --write-path="$data" --score-path="$data" "$@"

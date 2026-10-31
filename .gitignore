@@ -40,3 +40,5 @@ jh_small.ico
 bin/drl
 drl-win-deploy/
 src/.github/copilot-instructions.md
+stage/
+dist/
