@@ -11,7 +11,13 @@ The game itself is unchanged. It runs in its own console mode
 
 ## Engine (asciiverse/fpcvalkyrie.patch)
 
-Both are small and meant to be offered upstream.
+All small and meant to be offered upstream.
+
+- **Centred in bigger terminals.** The curses console told ncurses the
+  terminal was exactly 80x25 (resize_term), so the game sat in the top
+  left corner of any bigger window. It now keeps the real size and draws
+  its 80x25 screen in the middle, moving it when the terminal is resized;
+  at 80x25 and below nothing changes.
 
 - **No X11 for a terminal game.** The SDL3 bindings (vsdl3library,
   vsdl3mixerlibrary) list the units `x` and `xlib` without using them,

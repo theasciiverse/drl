@@ -39,3 +39,73 @@ index 49505fe..ddc3441 100644
  
    BeforeConfiguration(FPaths);
    LoadConfiguration(FPaths);
+diff --git a/src/vcursesconsole.pas b/src/vcursesconsole.pas
+index 3273ee4..68972b1 100644
+--- a/src/vcursesconsole.pas
++++ b/src/vcursesconsole.pas
+@@ -33,11 +33,13 @@ private
+   FUpdateNeeded  : Boolean;
+   FUpdateCursor  : Boolean;
+   FHighASCII     : array[128..255] of QWord;
++  FOffsetX       : Integer;
++  FOffsetY       : Integer;
+ end;
+ 
+ implementation
+ 
+-uses vutil, nCurses, vcursesio;
++uses vutil, nCurses, vcursesio, math;
+ 
+ const ColorMask     = $000000FF;
+       ForeColorMask = $0000000F;
+@@ -244,6 +246,18 @@ var iRefresh : Boolean;
+     iOut     : QWord;
+ begin
+   iRefresh := False;
++  // centre the screen in a bigger terminal; on a new size, clear and
++  // draw every cell again at the new place
++  x := Max( 0, ( nCurses.getmaxx( stdscr ) - FSizeX ) div 2 );
++  y := Max( 0, ( nCurses.getmaxy( stdscr ) - FSizeY ) div 2 );
++  if ( x <> FOffsetX ) or ( y <> FOffsetY ) then
++  begin
++    FOffsetX := x;
++    FOffsetY := y;
++    nCurses.erase();
++    ClearArray( FCursesArray, $FFFFFFFF );
++    FUpdateNeeded := True;
++  end;
+   if FUpdateNeeded then
+   begin
+     for y := 0 to FSizeY-1 do
+@@ -277,7 +291,7 @@ begin
+               nCurses.curs_set( 0 );
+               iRefresh := True;
+             end;
+-            nCurses.mvaddch( y, x, iOut );
++            nCurses.mvaddch( y + FOffsetY, x + FOffsetX, iOut );
+           end;
+           FCursesArray[y][x] := iValue;
+         end;
+@@ -287,7 +301,7 @@ begin
+   begin
+     if iRefresh then
+       SetCursorType( FCursorType );
+-    nCurses.move( FCursesPos.y-1, FCursesPos.x-1 );
++    nCurses.move( FCursesPos.y-1 + FOffsetY, FCursesPos.x-1 + FOffsetX );
+     nCurses.refresh();
+     FUpdateCursor := False;
+   end;
+diff --git a/src/vcursesio.pas b/src/vcursesio.pas
+index b1f7d7c..f676449 100644
+--- a/src/vcursesio.pas
++++ b/src/vcursesio.pas
+@@ -41,7 +41,8 @@ begin
+   Log('Initializing CursesIO driver...');
+ 
+   initscr();
+-  resize_term( aRows, aCols );
++  // no resize_term to aCols x aRows: the console keeps the terminal's
++  // real size and centres the game's screen in it
+   raw();
+   cbreak();
+   noecho();
