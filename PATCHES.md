@@ -35,9 +35,10 @@ All small and meant to be offered upstream.
 - `asciiverse/drl`, `asciiverse/stage.sh`: av's start script and the
   archive layout. The start script runs `--console --no-sound` and points
   `--write-path` and `--score-path` at `${XDG_DATA_HOME:-~/.local/share}/drl`.
-- `asciiverse/record-preview.sh`: records the catalog preview through
-  tmux and asciinema 3, answering menus by what is on screen; the kept
-  take is `asciiverse/drl.cast` (a walk on the first level, no fight yet).
+- `asciiverse/record-preview.py`: records the catalog preview through
+  tmux and asciinema 3: a new game, then a simple marine that fires,
+  reloads and explores. Fights are random; the kept take,
+  `asciiverse/drl.cast`, is the best of eleven (four kills).
 - `asciiverse/nfpm.yaml`: .deb, .rpm and Arch packages (the av layout
   in /usr/lib/drl, /usr/bin/drl linked to its start script).
 - `.github/workflows/asciiverse-release.yml`: builds all of it on a

@@ -17,5 +17,7 @@ patches upstream could take.
   changes into lib/ and passes --write-path/--score-path.
 - Name: keep "DRL", ChaosForge's own; don't use the old trademark name in
   our texts (the game's own screens say "D**m the Roguelike").
+- Preview: `python3 asciiverse/record-preview.py` (tmux, asciinema 3);
+  run it several times and keep a take with kills, under 60 s.
 - tmux capture-pane shows curses line drawing as q/x; pyte garbles
   DRL's screens, so script and check through tmux.
