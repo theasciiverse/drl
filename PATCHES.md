@@ -27,6 +27,12 @@ All small and meant to be offered upstream.
   saves, scores and logs but not settings.lua, which DRL writes on first
   start next to the binary. With `--write-path` given, settings.lua now
   goes there too, so DRL runs from a read-only install.
+- **No SDL 1.2 leftovers on macOS.** On macOS the SDL3 bindings
+  (vsdl3library, vsdl3mixerlibrary) still linked SDL 1.2's libSDLmain,
+  the SDL and Cocoa frameworks, and renamed the program's main to
+  SDL_main. SDL3 has no libSDLmain and is loaded at run time like on
+  Linux, so every macOS link failed (`ld: library 'SDLmain' not found`).
+  Those four lines are dropped.
 
 ## Packaging (new files)
 

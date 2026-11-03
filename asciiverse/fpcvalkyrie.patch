@@ -1,5 +1,5 @@
 diff --git a/libs/vsdl3library.pas b/libs/vsdl3library.pas
-index 53ec3af..5a730e8 100644
+index 53ec3af..f2d416b 100644
 --- a/libs/vsdl3library.pas
 +++ b/libs/vsdl3library.pas
 @@ -14,7 +14,7 @@ uses Classes, SysUtils, vlibrary,
@@ -11,8 +11,19 @@ index 53ec3af..5a730e8 100644
    {$ENDIF}
  {$ENDIF}
  
+@@ -24,10 +24,6 @@ const
+ {$ELSE}
+   {$IFDEF DARWIN}
+     SDL3DefaultPath = 'SDL3.framework/SDL3';
+-    {$linklib SDLmain}
+-    {$linkframework Cocoa}
+-    {$linkframework SDL}
+-    {$PASCALMAINNAME SDL_main}
+   {$ELSE}
+   SDL3DefaultPath = 'libSDL3.so.0.4.2';
+   {$ENDIF}
 diff --git a/libs/vsdl3mixerlibrary.pas b/libs/vsdl3mixerlibrary.pas
-index bc6b706..2a5ad6f 100644
+index bc6b706..d35b89c 100644
 --- a/libs/vsdl3mixerlibrary.pas
 +++ b/libs/vsdl3mixerlibrary.pas
 @@ -14,7 +14,7 @@ uses Classes, SysUtils, vlibrary, vsdl3library,
@@ -24,6 +35,17 @@ index bc6b706..2a5ad6f 100644
    {$ENDIF}
  {$ENDIF}
  
+@@ -24,10 +24,6 @@ const
+ {$ELSE}
+   {$IFDEF DARWIN}
+     SDL3MixerDefaultPath = 'SDL3_mixer.framework/SDL3_mixer';
+-    {$linklib SDLmain}
+-    {$linkframework Cocoa}
+-    {$linkframework SDL}
+-    {$PASCALMAINNAME SDL_main}
+   {$ELSE}
+   SDL3MixerDefaultPath = 'libSDL3_mixer-3.0.so.0';
+   {$ENDIF}
 diff --git a/src/vapp.pas b/src/vapp.pas
 index 49505fe..ddc3441 100644
 --- a/src/vapp.pas
