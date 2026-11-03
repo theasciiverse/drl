@@ -93,11 +93,23 @@ jobs:
       - name: Build
         run: |
           brew install fpc
-          # Lua 5.1 from source, as upstream's CI does (no Homebrew formula)
-          curl -fL https://www.lua.org/ftp/lua-5.1.5.tar.gz | tar xz
+          # Lua 5.1 from source, as upstream's CI does (no Homebrew formula);
+          # lua.org first, then mirrors of the same tarball, sha256 pinned
+          for u in https://www.lua.org/ftp/lua-5.1.5.tar.gz \
+                   https://distfiles.macports.org/lua51/lua-5.1.5.tar.gz \
+                   https://deb.debian.org/debian/pool/main/l/lua5.1/lua5.1_5.1.5.orig.tar.gz; do
+            curl -fL --retry 3 --retry-delay 15 --retry-all-errors --connect-timeout 30 \
+              -o lua.tar.gz "$u" && break
+          done
+          echo "2640fc56a795f29d28ef15e13c34a47e223960b0240e8cb0a82d9b0738695333  lua.tar.gz" | shasum -a 256 -c
+          tar xzf lua.tar.gz
           (cd lua-5.1.5 && make macosx && sudo make install INSTALL_TOP=/usr/local)
           sudo ln -sf /usr/local/bin/lua /usr/local/bin/lua5.1
           sudo cp /usr/local/lib/liblua.a /usr/local/lib/liblua5.1.a
+          # FPC's ncurses unit links -lncursesw; macOS has one curses
+          # library, libncurses (wide character calls included), so point
+          # the name at the SDK's stub in a folder the build searches
+          sudo ln -sf "$(xcrun --show-sdk-path)/usr/lib/libncurses.tbd" /usr/local/lib/libncursesw.tbd
           sh asciiverse/build.sh
           file bin/drl
           otool -L bin/drl
